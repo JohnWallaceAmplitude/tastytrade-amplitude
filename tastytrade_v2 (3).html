@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>tastytrade × Amplitude</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#0A0A0A;
+  --black-2:#111111;
+  --black-3:#1A1A1A;
+  --black-4:#222222;
+  --red:#E21E26;
+  --red-dark:#B01820;
+  --red-glow:rgba(226,30,38,0.15);
+  --white:#FFFFFF;
+  --white-90:rgba(255,255,255,0.9);
+  --white-70:rgba(255,255,255,0.7);
+  --white-50:rgba(255,255,255,0.5);
+  --white-30:rgba(255,255,255,0.3);
+  --white-10:rgba(255,255,255,0.1);
+  --white-06:rgba(255,255,255,0.06);
+  --white-03:rgba(255,255,255,0.03);
+  --green:#22C55E;
+  --green-bg:rgba(34,197,94,0.1);
+  --amber:#F59E0B;
+  --amber-bg:rgba(245,158,11,0.1);
+  --border:rgba(255,255,255,0.08);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--black);color:var(--white);font-size:15px;line-height:1.6;overflow-x:hidden}
+
+/* ─── TOPBAR ─── */
+.topbar{
+  padding:16px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  background:var(--black);
+  position:sticky;top:0;z-index:100;
+}
+.topbar-logo{display:flex;align-items:center;gap:12px}
+.tt-logo{
+  background:var(--red);
+  color:white;
+  font-size:13px;
+  font-weight:800;
+  padding:5px 10px;
+  border-radius:4px;
+  letter-spacing:-0.3px;
+}
+.topbar-x{color:var(--white-30);font-size:14px;font-weight:300}
+.amp-logo{color:var(--white-70);font-size:13px;font-weight:600;letter-spacing:0.2px}
+.topbar-right{font-family:'DM Mono',monospace;font-size:10px;color:var(--white-30);letter-spacing:0.8px;text-transform:uppercase}
+
+/* ─── HERO ─── */
+.hero{
+  padding:96px 48px 80px;
+  max-width:960px;
+  margin:0 auto;
+  text-align:center;
+}
+.hero-kicker{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--red-glow);
+  border:1px solid rgba(226,30,38,0.3);
+  border-radius:20px;
+  padding:6px 16px;
+  font-size:11px;
+  font-weight:700;
+  color:var(--red);
+  letter-spacing:1px;
+  text-transform:uppercase;
+  margin-bottom:32px;
+}
+.hero-kicker::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0}
+.hero-h1{
+  font-size:clamp(42px,6vw,68px);
+  font-weight:900;
+  line-height:1.02;
+  letter-spacing:-2px;
+  color:var(--white);
+  margin-bottom:28px;
+}
+.hero-h1 .red{color:var(--red)}
+.hero-h1 .dim{color:var(--white-50)}
+.hero-sub{
+  font-size:18px;
+  font-weight:400;
+  color:var(--white-70);
+  max-width:620px;
+  margin:0 auto 56px;
+  line-height:1.7;
+}
+.hero-stats{
+  display:flex;justify-content:center;gap:0;
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+  max-width:640px;
+  margin:0 auto;
+}
+.hero-stat{
+  flex:1;
+  padding:24px 20px;
+  border-right:1px solid var(--border);
+  text-align:center;
+}
+.hero-stat:last-child{border-right:none}
+.hs-num{font-size:28px;font-weight:800;color:var(--white);letter-spacing:-1px;line-height:1}
+.hs-num.red{color:var(--red)}
+.hs-label{font-size:11px;color:var(--white-50);margin-top:6px;font-weight:500}
+
+/* ─── SECTION DIVIDER ─── */
+.divider{height:1px;background:var(--border);margin:0 48px}
+
+/* ─── USE CASE BLOCKS ─── */
+.uc-section{padding:0 48px;max-width:1160px;margin:0 auto}
+
+.uc-block{
+  padding:80px 0;
+  border-bottom:1px solid var(--border);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:72px;
+  align-items:start;
+}
+.uc-block:last-child{border-bottom:none}
+.uc-block.flip{direction:rtl}
+.uc-block.flip > *{direction:ltr}
+
+.uc-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:700;
+  color:var(--white-50);
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  margin-bottom:20px;
+}
+.uc-tag .num{
+  background:var(--red);
+  color:white;
+  width:20px;height:20px;
+  border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:800;
+  flex-shrink:0;
+}
+
+.uc-h2{
+  font-size:clamp(28px,3vw,38px);
+  font-weight:800;
+  line-height:1.1;
+  letter-spacing:-1px;
+  color:var(--white);
+  margin-bottom:20px;
+}
+.uc-h2 .red{color:var(--red)}
+
+.problem-box{
+  background:rgba(226,30,38,0.06);
+  border:1px solid rgba(226,30,38,0.2);
+  border-radius:10px;
+  padding:18px 20px;
+  margin-bottom:28px;
+}
+.problem-label{
+  font-size:10px;font-weight:700;
+  color:var(--red);
+  text-transform:uppercase;letter-spacing:1.5px;
+  margin-bottom:8px;
+  font-family:'DM Mono',monospace;
+}
+.problem-text{font-size:14px;color:var(--white-70);line-height:1.65}
+
+.uc-body{font-size:15px;color:var(--white-60,rgba(255,255,255,0.6));line-height:1.75;margin-bottom:24px}
+
+.uc-list{list-style:none;display:flex;flex-direction:column;gap:12px}
+.uc-list li{
+  display:flex;align-items:flex-start;gap:12px;
+  font-size:14px;color:var(--white-70);
+  line-height:1.5;
+}
+.uc-list li::before{
+  content:'→';
+  color:var(--red);
+  font-weight:700;
+  flex-shrink:0;
+  margin-top:1px;
+  font-family:'DM Mono',monospace;
+}
+
+/* ─── VISUAL CARDS ─── */
+.viz{
+  background:var(--black-3);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:28px;
+  position:relative;
+  overflow:hidden;
+}
+.viz::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--red);
+  border-radius:14px 14px 0 0;
+}
+.viz-label{
+  font-family:'DM Mono',monospace;
+  font-size:10px;color:var(--white-40,rgba(255,255,255,0.4));
+  text-transform:uppercase;letter-spacing:1.5px;
+  margin-bottom:24px;
+}
+
+/* funnel */
+.f-row{
+  display:flex;align-items:center;gap:14px;
+  padding:11px 0;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.f-row:last-of-type{border-bottom:none}
+.f-lbl{font-size:12px;color:var(--white-60,rgba(255,255,255,0.6));font-family:'DM Mono',monospace;width:130px;flex-shrink:0}
+.f-track{flex:1;height:7px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden}
+.f-fill{height:100%;border-radius:4px;background:var(--red);transition:width 0.3s}
+.f-val{font-size:13px;font-weight:700;color:var(--white);width:38px;text-align:right;font-family:'DM Mono',monospace}
+.f-drop{font-size:10px;color:var(--red);width:42px;text-align:right;font-family:'DM Mono',monospace;font-weight:600}
+
+/* churn cards */
+.churn-item{
+  display:flex;align-items:center;gap:14px;
+  padding:13px 0;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.churn-item:last-child{border-bottom:none}
+.c-av{
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;
+  flex-shrink:0;
+  font-family:'DM Mono',monospace;
+}
+.c-av.red{background:rgba(226,30,38,0.2);color:#FCA5A5}
+.c-av.amber{background:rgba(245,158,11,0.15);color:#FCD34D}
+.c-av.green{background:rgba(34,197,94,0.15);color:#86EFAC}
+.c-info{flex:1}
+.c-name{font-size:13px;font-weight:600;color:var(--white-90)}
+.c-detail{font-size:11px;color:var(--white-50);margin-top:2px}
+.c-score{font-size:13px;font-weight:700;font-family:'DM Mono',monospace}
+.c-score.red{color:#FCA5A5}
+.c-score.amber{color:#FCD34D}
+.c-score.green{color:#86EFAC}
+
+/* guides */
+.guide-item{
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:18px;
+  margin-bottom:12px;
+}
+.guide-item:last-child{margin-bottom:0}
+.g-trigger{
+  font-size:10px;font-weight:700;
+  color:var(--red);
+  text-transform:uppercase;letter-spacing:1px;
+  margin-bottom:6px;
+  font-family:'DM Mono',monospace;
+}
+.g-title{font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px}
+.g-desc{font-size:12px;color:var(--white-50);line-height:1.5}
+
+/* product analytics bars */
+.pa-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.pa-item:last-child{border-bottom:none}
+.pa-feat{font-size:13px;color:var(--white-80,rgba(255,255,255,0.8));flex:1}
+.pa-track{width:110px;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
+.pa-fill{height:100%;border-radius:3px}
+.pa-val{font-size:12px;font-family:'DM Mono',monospace;width:36px;text-align:right}
+
+/* session replay */
+.sr-item{
+  padding:14px 0;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.sr-item:last-child{border-bottom:none}
+.sr-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.sr-meta{font-size:11px;color:var(--white-40,rgba(255,255,255,0.4));font-family:'DM Mono',monospace}
+.sr-tag{
+  font-size:10px;font-weight:700;
+  padding:3px 9px;border-radius:20px;
+}
+.tag-red{background:rgba(226,30,38,0.15);color:#FCA5A5}
+.tag-amber{background:rgba(245,158,11,0.15);color:#FCD34D}
+.tag-green{background:rgba(34,197,94,0.15);color:#86EFAC}
+.sr-text{font-size:13px;color:var(--white-70);line-height:1.5}
+
+/* attribution compare */
+.attr-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.attr-col{background:rgba(255,255,255,0.03);border-radius:10px;padding:18px}
+.attr-head{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;font-family:'DM Mono',monospace}
+.attr-head.red{color:var(--red)}
+.attr-head.green{color:var(--green)}
+.attr-row{
+  font-size:12px;color:var(--white-60,rgba(255,255,255,0.6));
+  margin-bottom:8px;
+  display:flex;align-items:flex-start;gap:8px;
+  line-height:1.4;
+}
+.attr-row::before{font-size:11px;flex-shrink:0;margin-top:1px}
+.attr-row.bad::before{content:'✗';color:var(--red)}
+.attr-row.good::before{content:'✓';color:var(--green)}
+
+/* AI insight box */
+.ai-box{
+  margin-top:20px;
+  background:rgba(226,30,38,0.06);
+  border:1px solid rgba(226,30,38,0.2);
+  border-radius:8px;
+  padding:14px 16px;
+}
+.ai-label{font-size:10px;font-weight:700;color:var(--red);font-family:'DM Mono',monospace;letter-spacing:1px;margin-bottom:4px}
+.ai-text{font-size:12px;color:var(--white-70);line-height:1.55}
+.ai-text strong{color:var(--white)}
+
+/* ─── PULL QUOTE ─── */
+.quote-wrap{
+  padding:72px 48px;
+  max-width:800px;
+  margin:0 auto;
+  text-align:center;
+}
+.qt{
+  font-size:clamp(20px,2.5vw,27px);
+  font-weight:600;
+  color:var(--white-80,rgba(255,255,255,0.8));
+  line-height:1.5;
+  font-style:italic;
+  margin-bottom:16px;
+}
+.qt-attr{font-size:12px;font-family:'DM Mono',monospace;color:var(--white-30);text-transform:uppercase;letter-spacing:1px}
+
+/* ─── PROOF ─── */
+.proof-wrap{
+  background:var(--black-2);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:56px 48px;
+}
+.proof-inner{max-width:1160px;margin:0 auto}
+.proof-eyebrow{
+  font-size:11px;font-weight:700;
+  color:var(--white-40,rgba(255,255,255,0.4));
+  text-transform:uppercase;letter-spacing:2px;
+  text-align:center;margin-bottom:36px;
+  font-family:'DM Mono',monospace;
+}
+.proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.proof-card{
+  background:var(--black-3);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:28px 24px;
+  position:relative;overflow:hidden;
+}
+.proof-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--red);
+}
+.proof-num{
+  font-size:42px;font-weight:900;
+  letter-spacing:-2px;
+  color:var(--white);
+  line-height:1;
+  margin-bottom:10px;
+}
+.proof-desc{font-size:13px;color:var(--white-60,rgba(255,255,255,0.6));line-height:1.55;margin-bottom:12px}
+.proof-co{font-size:10px;font-family:'DM Mono',monospace;color:var(--white-30);text-transform:uppercase;letter-spacing:1px}
+
+/* ─── NEXT STEPS ─── */
+.next-wrap{padding:96px 48px;max-width:1000px;margin:0 auto;text-align:center}
+.next-h2{
+  font-size:clamp(32px,4vw,48px);
+  font-weight:900;
+  letter-spacing:-1.5px;
+  color:var(--white);
+  margin-bottom:14px;
+}
+.next-sub{font-size:16px;color:var(--white-50);margin-bottom:56px}
+
+.next-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;text-align:left;margin-bottom:56px}
+.next-card{
+  background:var(--black-3);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:28px;
+}
+.next-n{
+  font-size:13px;font-weight:800;
+  color:var(--red);
+  font-family:'DM Mono',monospace;
+  margin-bottom:14px;
+}
+.next-title{font-size:16px;font-weight:700;color:var(--white);margin-bottom:8px;letter-spacing:-0.3px}
+.next-desc{font-size:13px;color:var(--white-50);line-height:1.55}
+
+.contact{font-size:14px;color:var(--white-40,rgba(255,255,255,0.4))}
+.contact a{color:var(--white-70);text-decoration:none}
+.contact a:hover{color:var(--white)}
+
+/* ─── FOOTER ─── */
+.footer{
+  padding:20px 48px;
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.footer-l{font-size:11px;color:var(--white-30);font-family:'DM Mono',monospace}
+.footer-r{font-size:11px;color:var(--white-30)}
+
+@media(max-width:768px){
+  .uc-block{grid-template-columns:1fr;gap:40px}
+  .uc-block.flip{direction:ltr}
+  .hero-stats{flex-direction:column;border-radius:12px}
+  .hero-stat{border-right:none;border-bottom:1px solid var(--border)}
+  .hero-stat:last-child{border-bottom:none}
+  .proof-grid,.next-grid{grid-template-columns:1fr}
+  .attr-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <div class="tt-logo">tastytrade</div>
+    <div class="topbar-x">×</div>
+    <div class="amp-logo">Amplitude</div>
+  </div>
+  <div class="topbar-right">Confidential · April 2026</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-kicker">Product Intelligence Brief</div>
+  <h1 class="hero-h1">
+    Every click, every trade,<br>every dropout is telling you something.<br>
+    <span class="red">Are you listening?</span>
+  </h1>
+  <p class="hero-sub">tastytrade is growing fast — 51% revenue growth, 64% more first trades year over year. The next unlock isn't more traffic. It's understanding why funded accounts don't trade, why new traders quit after losses, and what your best traders have in common.</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hs-num red">51%</div>
+      <div class="hs-label">Revenue growth YoY (Q4 '25)</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hs-num red">64%</div>
+      <div class="hs-label">First trades growth YoY</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hs-num">Hours→Weeks</div>
+      <div class="hs-label">To answer one behavioral question today</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- USE CASES -->
+<div class="uc-section">
+
+  <!-- 01: FUNNEL -->
+  <div class="uc-block">
+    <div>
+      <div class="uc-tag"><span class="num">1</span> Acquisition & Conversion</div>
+      <h2 class="uc-h2">People are funding accounts<br>and <span class="red">never placing a trade.</span></h2>
+      <div class="problem-box">
+        <div class="problem-label">The problem right now</div>
+        <div class="problem-text">Someone applies, passes KYC, and funds an account — then nothing. You know the account exists. You don't know what happened between funding and first trade, why they hesitated, or what the traders who stayed had in common.</div>
+      </div>
+      <p class="uc-body">The funded account that places a first trade in week one has dramatically higher LTV. That behavior is predictable — if you can see the signals. Right now those signals are buried across disconnected systems.</p>
+      <ul class="uc-list">
+        <li>Single funnel: site visit → KYC → funded → first trade — one view, no SQL required</li>
+        <li>See exactly which step each cohort drops off and which acquisition channel sent them</li>
+        <li>Identify the product behaviors that predict an active trader in week one</li>
+        <li>Build cohorts of high-LTV traders and sync to acquisition channels to find more</li>
+      </ul>
+    </div>
+    <div class="viz">
+      <div class="viz-label">Conversion funnel — account open to first trade</div>
+      <div class="f-row">
+        <div class="f-lbl">Site Visit</div>
+        <div class="f-track"><div class="f-fill" style="width:100%;opacity:0.9"></div></div>
+        <div class="f-val">100%</div>
+        <div class="f-drop"></div>
+      </div>
+      <div class="f-row">
+        <div class="f-lbl">App Started</div>
+        <div class="f-track"><div class="f-fill" style="width:38%;opacity:0.8"></div></div>
+        <div class="f-val">38%</div>
+        <div class="f-drop">−62%</div>
+      </div>
+      <div class="f-row">
+        <div class="f-lbl">KYC Approved</div>
+        <div class="f-track"><div class="f-fill" style="width:24%;opacity:0.7"></div></div>
+        <div class="f-val">24%</div>
+        <div class="f-drop">−14%</div>
+      </div>
+      <div class="f-row">
+        <div class="f-lbl">Account Funded</div>
+        <div class="f-track"><div class="f-fill" style="width:14%;opacity:0.6"></div></div>
+        <div class="f-val">14%</div>
+        <div class="f-drop">−10%</div>
+      </div>
+      <div class="f-row">
+        <div class="f-lbl" style="color:var(--white);font-weight:600">First Trade ← $$$</div>
+        <div class="f-track"><div class="f-fill" style="width:9%;background:var(--white)"></div></div>
+        <div class="f-val" style="color:var(--white);font-size:14px">9%</div>
+        <div class="f-drop">−5%</div>
+      </div>
+      <div class="ai-box">
+        <div class="ai-label">Amplitude identifies</div>
+        <div class="ai-text">Users from <strong>tastycrypto referral traffic</strong> fund at 2.3x the rate of paid search — but place a first trade 40% less often. The problem isn't acquisition. It's what happens after they fund.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02: CHURN PREDICTION -->
+  <div class="uc-block flip">
+    <div>
+      <div class="uc-tag"><span class="num">2</span> Churn Prediction</div>
+      <h2 class="uc-h2">Traders who lose money<br>go quiet. <span class="red">Stop finding out too late.</span></h2>
+      <div class="problem-box">
+        <div class="problem-label">The problem right now</div>
+        <div class="problem-text">A new trader funds, places a few trades, takes losses on a bad week — and stops logging in. By the time you know they're gone, they've already defunded. The window to bring them back has closed.</div>
+      </div>
+      <p class="uc-body">Amplitude identifies at-risk traders days before they defund — based on behavioral signals, not gut feel. Funded, traded, negative P&L, login frequency dropping. That cohort is recoverable with the right message at the right moment.</p>
+      <ul class="uc-list">
+        <li>Identify at-risk traders based on behavior — not calendar-based email cadences</li>
+        <li>See the exact session where engagement dropped and what preceded it</li>
+        <li>Trigger re-engagement based on P&L, login frequency, and feature usage signals</li>
+        <li>Measure whether interventions actually change downstream trading behavior</li>
+      </ul>
+    </div>
+    <div class="viz">
+      <div class="viz-label">Churn risk — early signal detection</div>
+      <div class="churn-item">
+        <div class="c-av red">JM</div>
+        <div class="c-info">
+          <div class="c-name">Funded 18 days ago</div>
+          <div class="c-detail">3 trades · −$340 P&L · 0 logins in 9 days</div>
+        </div>
+        <div class="c-score red">91% risk</div>
+      </div>
+      <div class="churn-item">
+        <div class="c-av amber">SR</div>
+        <div class="c-info">
+          <div class="c-name">Funded 31 days ago</div>
+          <div class="c-detail">7 trades · browsing only · never used Strategy Builder</div>
+        </div>
+        <div class="c-score amber">67% risk</div>
+      </div>
+      <div class="churn-item">
+        <div class="c-av green">AK</div>
+        <div class="c-info">
+          <div class="c-name">Funded 12 days ago</div>
+          <div class="c-detail">11 trades · used backtester · daily logins</div>
+        </div>
+        <div class="c-score green">Low risk</div>
+      </div>
+      <div class="ai-box">
+        <div class="ai-label">Amplitude AI insight</div>
+        <div class="ai-text">Users with <strong>≤3 trades, negative P&L, and less than 2 logins in week 2</strong> have 4.2x higher defund probability within 30 days. Recommended action: trigger "Managing First Losses" guide at day 8 of inactivity.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03: PRODUCT ANALYTICS -->
+  <div class="uc-block">
+    <div>
+      <div class="uc-tag"><span class="num">3</span> Product Analytics</div>
+      <h2 class="uc-h2">Your whole business is<br>a digital product. <span class="red">Build what matters.</span></h2>
+      <div class="problem-box">
+        <div class="problem-label">The problem right now</div>
+        <div class="problem-text">Which features do your best traders use? What's the correlation between using the backtester and staying active at 90 days? Which product changes actually moved the needle? Answering any of this takes an analyst and a week — if the tracking exists at all.</div>
+      </div>
+      <p class="uc-body">Amplitude makes every behavioral question answerable in minutes, by any team member — no SQL, no sprint, no ticket. Your roadmap gets driven by what active traders actually do, not assumptions.</p>
+      <ul class="uc-list">
+        <li>Feature adoption split: high-LTV traders vs. all new users — see the gap instantly</li>
+        <li>Any PM answers behavioral questions in natural language, no engineering ticket required</li>
+        <li>Run A/B tests on onboarding flows and measure downstream trading outcomes — not just clicks</li>
+        <li>Autocapture means new features are tracked from day one, no instrumentation sprint</li>
+      </ul>
+    </div>
+    <div class="viz">
+      <div class="viz-label">Feature adoption — active traders (90 days) vs. all new users</div>
+      <div class="pa-item">
+        <div class="pa-feat">Strategy Builder</div>
+        <div class="pa-track"><div class="pa-fill" style="width:82%;background:var(--white)"></div></div>
+        <div class="pa-val" style="color:var(--white);font-weight:700">82%</div>
+      </div>
+      <div class="pa-item">
+        <div class="pa-feat">Backtesting Tool</div>
+        <div class="pa-track"><div class="pa-fill" style="width:71%;background:var(--white)"></div></div>
+        <div class="pa-val" style="color:var(--white);font-weight:700">71%</div>
+      </div>
+      <div class="pa-item">
+        <div class="pa-feat">Risk Analysis</div>
+        <div class="pa-track"><div class="pa-fill" style="width:64%;background:var(--white)"></div></div>
+        <div class="pa-val" style="color:var(--white);font-weight:700">64%</div>
+      </div>
+      <div style="height:1px;background:var(--border);margin:14px 0"></div>
+      <div class="pa-item">
+        <div class="pa-feat" style="color:var(--white-40,rgba(255,255,255,0.4))">Strategy Builder</div>
+        <div class="pa-track"><div class="pa-fill" style="width:18%;background:rgba(255,255,255,0.2)"></div></div>
+        <div class="pa-val" style="color:var(--white-40,rgba(255,255,255,0.4))">18%</div>
+      </div>
+      <div class="pa-item">
+        <div class="pa-feat" style="color:var(--white-40,rgba(255,255,255,0.4))">Backtesting Tool</div>
+        <div class="pa-track"><div class="pa-fill" style="width:9%;background:rgba(255,255,255,0.2)"></div></div>
+        <div class="pa-val" style="color:var(--white-40,rgba(255,255,255,0.4))">9%</div>
+      </div>
+      <div class="pa-item">
+        <div class="pa-feat" style="color:var(--white-40,rgba(255,255,255,0.4))">Risk Analysis</div>
+        <div class="pa-track"><div class="pa-fill" style="width:6%;background:rgba(255,255,255,0.2)"></div></div>
+        <div class="pa-val" style="color:var(--white-40,rgba(255,255,255,0.4))">6%</div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:18px">
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--white-40,rgba(255,255,255,0.4))"><div style="width:10px;height:10px;border-radius:2px;background:var(--white);flex-shrink:0"></div>Active traders (90+ days)</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--white-40,rgba(255,255,255,0.4))"><div style="width:10px;height:10px;border-radius:2px;background:rgba(255,255,255,0.2);flex-shrink:0"></div>All new users</div>
+      </div>
+      <div class="ai-box">
+        <div class="ai-label">Key finding</div>
+        <div class="ai-text">New users who use the Backtesting Tool in their first 14 days are <strong>3.8x more likely to be active at 90 days.</strong> Current new user adoption: 9%. This is your highest-ROI product investment.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04: GUIDES & SURVEYS -->
+  <div class="uc-block flip">
+    <div>
+      <div class="uc-tag"><span class="num">4</span> In-App Guides & Surveys</div>
+      <h2 class="uc-h2">Options are complicated.<br><span class="red">Onboarding shouldn't be</span> one-size-fits-all.</h2>
+      <div class="problem-box">
+        <div class="problem-label">The problem right now</div>
+        <div class="problem-text">A mobile-first user who's never traded options and a desktop power trader running iron condors are going through the same onboarding. You already have KYC risk profiles that tell you exactly who each user is. You're not using them to personalize their experience.</div>
+      </div>
+      <p class="uc-body">Amplitude Guides & Surveys lets your product team build in-app coaching flows that trigger based on who the user is and where they are in the product — no engineering sprint, no code deploy.</p>
+      <ul class="uc-list">
+        <li>Different onboarding paths by KYC risk profile — conservative vs. speculative traders see different flows</li>
+        <li>Funding flow prompts for users who stall mid-process — step-by-step, contextual</li>
+        <li>Tool tooltips for Greeks, backtesting, and risk analysis that appear when a user first encounters them</li>
+        <li>Product team builds and launches independently — no engineering required</li>
+      </ul>
+    </div>
+    <div class="viz">
+      <div class="viz-label">In-app guide triggers — examples</div>
+      <div class="guide-item">
+        <div class="g-trigger">Trigger: KYC Risk = Conservative + First Login</div>
+        <div class="g-title">Welcome — let's start with the basics</div>
+        <div class="g-desc">Shows covered calls and cash-secured puts. Hides futures and naked options. Surfaces tastylive beginner content. Adapts the platform to who this user actually is.</div>
+      </div>
+      <div class="guide-item">
+        <div class="g-trigger">Trigger: Funded — No Trade in 5 Days</div>
+        <div class="g-title">Your account is ready. Place your first trade?</div>
+        <div class="g-desc">Interactive walkthrough using Strategy Builder. Shows expected P&L, max loss, and breakeven before they execute. Removes the intimidation of a blank trading interface.</div>
+      </div>
+      <div class="guide-item">
+        <div class="g-trigger">Trigger: First Visit to Risk Analysis Page</div>
+        <div class="g-title">This is where pros manage position risk</div>
+        <div class="g-desc">30-second interactive tooltip on Greeks display and stress test chart. Disappears after one view. Contextual education at the moment it's needed.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05: SESSION REPLAY -->
+  <div class="uc-block">
+    <div>
+      <div class="uc-tag"><span class="num">5</span> Session Replay</div>
+      <h2 class="uc-h2">100,000 users are showing<br>you what's broken. <span class="red">AI watches.</span></h2>
+      <div class="problem-box">
+        <div class="problem-label">The problem right now</div>
+        <div class="problem-text">You know users drop off at the funding step. You know some never return after their first loss. But you don't know what they actually experienced — where they hesitated, what they clicked that confused them, what the screen looked like when they gave up.</div>
+      </div>
+      <p class="uc-body">Amplitude Session Replay with AI doesn't make you watch thousands of recordings. It automatically surfaces the sessions worth watching — the friction patterns, rage clicks, and abandonment moments that explain the "why" behind your data.</p>
+      <ul class="uc-list">
+        <li>AI clusters sessions by behavior — abandonment, confusion, successful activation</li>
+        <li>Watch the exact moments users stall during KYC, funding, or first trade setup</li>
+        <li>Connect session behavior directly to outcomes — did this user churn? Fund? Trade?</li>
+        <li>No manual review — surface the clips that matter, skip the ones that don't</li>
+      </ul>
+    </div>
+    <div class="viz">
+      <div class="viz-label">Session replay — AI surfaced insights</div>
+      <div class="sr-item">
+        <div class="sr-head">
+          <div class="sr-meta">1,847 sessions · Funding Flow · Last 7 days</div>
+          <div class="sr-tag tag-red">High Friction</div>
+        </div>
+        <div class="sr-text">Users rage-clicking "Add Bank Account" on mobile. ACH linking UI not rendering on iOS 17.4. Drop-off: 73% on mobile vs. 18% on desktop. Engineering ticket raised in 4 minutes.</div>
+      </div>
+      <div class="sr-item">
+        <div class="sr-head">
+          <div class="sr-meta">423 sessions · Options Chain · New Users</div>
+          <div class="sr-tag tag-amber">Confusion Pattern</div>
+        </div>
+        <div class="sr-text">New users hovering on Greeks columns for 3–8 seconds before exiting. 81% don't place a trade in the same session. Prime candidate for contextual tooltip guide.</div>
+      </div>
+      <div class="sr-item">
+        <div class="sr-head">
+          <div class="sr-meta">2,291 sessions · Strategy Builder · Power Users</div>
+          <div class="sr-tag tag-green">Activation Signal</div>
+        </div>
+        <div class="sr-text">Users who build a strategy, run a backtest, AND check Risk Analysis in one session have 4.1x higher 30-day retention. This is the "aha moment" — now find more paths to it.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 06: ATTRIBUTION / ROCKERBOX -->
+  <div class="uc-block flip">
+    <div>
+      <div class="uc-tag"><span class="num">6</span> Attribution</div>
+      <h2 class="uc-h2">Rockerbox was built<br>for checkout. <span class="red">You're not a storefront.</span></h2>
+      <div class="problem-box">
+        <div class="problem-label">The problem right now</div>
+        <div class="problem-text">Apply → KYC → Fund → Trade is a multi-week, multi-step funnel that Rockerbox's ecommerce model wasn't designed for. You're hitting the ceiling of what out-of-the-box looks like — and custom work means engineering sprints.</div>
+      </div>
+      <p class="uc-body">Amplitude connects pre-acquisition behavior to post-acquisition outcomes natively. First site click to first trade placed — one funnel, no custom pipeline. The model that replaces what Rockerbox can't do.</p>
+      <ul class="uc-list">
+        <li>Multi-touch attribution that ends at first trade — not account open</li>
+        <li>Customer vs. account model handled natively — multiple accounts, one user identity</li>
+        <li>Connect tastycrypto top-of-funnel to downstream tastytrade conversion</li>
+        <li>Which channels produce traders who fund AND trade — not just traders who apply</li>
+      </ul>
+    </div>
+    <div class="viz">
+      <div class="viz-label">Attribution model comparison</div>
+      <div class="attr-grid">
+        <div class="attr-col">
+          <div class="attr-head red">Rockerbox today</div>
+          <div class="attr-row bad">Conversion = account open</div>
+          <div class="attr-row bad">No visibility post-signup</div>
+          <div class="attr-row bad">eCommerce model, not brokerage</div>
+          <div class="attr-row bad">Can't track fund → trade journey</div>
+          <div class="attr-row bad">Custom work = engineering sprint</div>
+        </div>
+        <div class="attr-col">
+          <div class="attr-head green">Amplitude</div>
+          <div class="attr-row good">Conversion = first trade placed</div>
+          <div class="attr-row good">Full journey: click → trade</div>
+          <div class="attr-row good">Built for multi-step funnels</div>
+          <div class="attr-row good">Customer + account model native</div>
+          <div class="attr-row good">Self-serve, no sprint required</div>
+        </div>
+      </div>
+      <div class="ai-box">
+        <div class="ai-label">In practice</div>
+        <div class="ai-text">A global trading platform switched attribution to Amplitude, connected acquisition source to downstream trading behavior, and saw a <strong>14% ROI increase</strong> across top channels in four months — by optimizing for traders, not signups.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end uc-section -->
+
+<!-- QUOTE -->
+<div class="divider"></div>
+
+<!-- PROOF -->
+<div class="proof-wrap">
+  <div class="proof-inner">
+    <div class="proof-eyebrow">What this looks like in practice</div>
+    <div class="proof-grid">
+      <div class="proof-card">
+        <img src="data:image/png;base64,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" alt="Xapo Bank" style="height:32px;object-fit:contain;margin-bottom:20px;background:white;padding:6px 10px;border-radius:6px">
+        <div class="proof-num">2x</div>
+        <div class="proof-desc">Increase in conversion rates at key onboarding points after running 30 experiments in a year — connecting account open to funded, active trader.</div>
+        <div class="proof-co">Xapo Bank · Onboarding & Activation</div>
+      </div>
+      <div class="proof-card">
+        <img src="data:image/png;base64,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" alt="Dave" style="height:32px;object-fit:contain;margin-bottom:20px;background:white;padding:6px 10px;border-radius:6px">
+        <div class="proof-num">5.7x</div>
+        <div class="proof-desc">Improvement in retention after using Amplitude to optimize onboarding, identify churn signals early, and double monthly active users across their fintech platform.</div>
+        <div class="proof-co">Dave · Retention & Churn</div>
+      </div>
+      <div class="proof-card">
+        <div style="height:36px;display:flex;align-items:center;margin-bottom:20px">
+          <div style="font-size:13px;font-weight:800;color:rgba(255,255,255,0.5);letter-spacing:-0.3px;font-family:'Inter',sans-serif">GLOBAL TRADING<br>PLATFORM</div>
+        </div>
+        <div class="proof-num">14%</div>
+        <div class="proof-desc">ROI increase across top acquisition channels after connecting acquisition source to downstream trading behavior — optimizing for traders who fund and trade, not just signups.</div>
+        <div class="proof-co">Global Trading Platform · Attribution</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NEXT STEPS -->
+<div class="next-wrap">
+  <h2 class="next-h2">We'll see you Tuesday.</h2>
+  <p class="next-sub">April 29 · tastytrade Chicago office</p>
+  <div class="contact">
+    John Wallace · <a href="mailto:john.wallace@amplitude.com">john.wallace@amplitude.com</a> · 631-942-8868
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-l">tastytrade × Amplitude · April 2026</div>
+  <div class="footer-r" style="font-size:10px;color:rgba(255,255,255,0.2);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:1px">Confidential — Internal Use Only</div>
+</div>
+
+</body>
+</html>
