@@ -1,1168 +1,416 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tastytrade × Amplitude</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --red: #E8003D;
-      --red-soft: rgba(232, 0, 61, 0.12);
-      --red-border: rgba(232, 0, 61, 0.25);
-      --bg: #0A0A0B;
-      --bg-2: #111113;
-      --bg-3: #161618;
-      --bg-card: #1A1A1D;
-      --border: rgba(255,255,255,0.07);
-      --border-bright: rgba(255,255,255,0.12);
-      --text-primary: #F2F2F3;
-      --text-secondary: #C8C8D4;
-      --text-muted: #5E5E6A;
-      --mono: 'DM Mono', monospace;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text-primary);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ---- NAV ---- */
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(10, 10, 11, 0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      padding: 0 48px;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    /* tastytrade logo: red dot + lowercase wordmark */
-    .tt-logo {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .tt-dot {
-      width: 10px;
-      height: 10px;
-      background: var(--red);
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .tt-wordmark {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--text-primary);
-      letter-spacing: -0.01em;
-    }
-
-    .nav-tag {
-      font-family: var(--mono);
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      border: 1px solid var(--border);
-      padding: 4px 10px;
-      border-radius: 2px;
-    }
-
-    /* ---- HERO ---- */
-    .hero {
-      min-height: 88vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 0 48px 80px;
-      position: relative;
-      overflow: hidden;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 50% at 80% 20%, rgba(232,0,61,0.07) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 60% at 10% 80%, rgba(232,0,61,0.04) 0%, transparent 60%);
-      pointer-events: none;
-    }
-
-    .hero-eyebrow {
-      font-family: var(--mono);
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--red);
-      margin-bottom: 28px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .hero-eyebrow::before {
-      content: '';
-      display: block;
-      width: 28px;
-      height: 1px;
-      background: var(--red);
-    }
-
-    .hero-headline {
-      font-size: clamp(48px, 7vw, 96px);
-      font-weight: 700;
-      line-height: 0.95;
-      letter-spacing: -0.03em;
-      max-width: 900px;
-      margin-bottom: 32px;
-    }
-
-    .hero-headline em {
-      font-style: italic;
-      font-weight: 300;
-      color: var(--red);
-    }
-
-    .hero-sub {
-      font-size: 20px;
-      color: var(--text-secondary);
-      line-height: 1.75;
-      max-width: 560px;
-      margin-bottom: 56px;
-    }
-
-    .hero-meta {
-      display: flex;
-      gap: 40px;
-      border-top: 1px solid var(--border);
-      padding-top: 28px;
-    }
-
-    .hero-meta-item {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .meta-label {
-      font-family: var(--mono);
-      font-size: 9px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-
-    .meta-value {
-      font-size: 18px;
-      font-weight: 500;
-      color: var(--text-secondary);
-    }
-
-    /* ---- BOTTOM LINE ---- */
-    .bottom-line {
-      background: var(--red);
-      padding: 56px 48px;
-    }
-
-    .bottom-line-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: center;
-    }
-
-    .bl-label {
-      font-family: var(--mono);
-      font-size: 9px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.6);
-      margin-bottom: 16px;
-    }
-
-    .bl-headline {
-      font-size: clamp(22px, 2.5vw, 32px);
-      font-weight: 700;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-      color: white;
-    }
-
-    .bl-body {
-      font-size: 18px;
-      color: rgba(255,255,255,0.8);
-      line-height: 1.75;
-    }
-
-    /* ---- SECTION WRAPPER ---- */
-    .section-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-family: var(--mono);
-      font-size: 9px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--red);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 40px;
-    }
-    .section-label::before {
-      content: '';
-      display: block;
-      width: 20px;
-      height: 1px;
-      background: var(--red);
-    }
-
-    /* ---- THE PROBLEM ---- */
-    .problem {
-      padding: 96px 48px;
-      background: var(--bg-2);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .problem-grid {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 80px;
-      align-items: start;
-    }
-
-    .problem-headline {
-      font-size: clamp(28px, 3vw, 40px);
-      font-weight: 700;
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-      position: sticky;
-      top: 72px;
-    }
-
-    .problem-headline em {
-      font-style: italic;
-      font-weight: 300;
-      color: var(--red);
-    }
-
-    .problem-items {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
-    .problem-item {
-      padding: 28px 0;
-      border-bottom: 1px solid var(--border);
-      display: grid;
-      grid-template-columns: 48px 1fr;
-      gap: 20px;
-      align-items: start;
-    }
-
-    .problem-item:first-child {
-      border-top: 1px solid var(--border);
-    }
-
-    .problem-num {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--text-muted);
-      letter-spacing: 0.06em;
-      padding-top: 3px;
-    }
-
-    .problem-title {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 8px;
-      letter-spacing: -0.01em;
-    }
-
-    .problem-body {
-      font-size: 17px;
-      color: var(--text-secondary);
-      line-height: 1.75;
-    }
-
-    .problem-quote {
-      margin-top: 12px;
-      padding: 10px 14px;
-      background: var(--red-soft);
-      border-left: 2px solid var(--red);
-      border-radius: 0 2px 2px 0;
-      font-size: 17px;
-      color: rgba(232,0,61,0.9);
-      font-style: italic;
-      line-height: 1.6;
-    }
-
-    /* ---- TIME COST STAT BAND ---- */
-    .stat-band {
-      padding: 48px 48px;
-      background: var(--bg-3);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .stat-row {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .stat-cell {
-      background: var(--bg-card);
-      padding: 32px 36px;
-    }
-
-    .stat-number {
-      font-size: clamp(36px, 4vw, 52px);
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      color: var(--text-primary);
-      line-height: 1;
-      margin-bottom: 10px;
-    }
-
-    .stat-number span {
-      color: var(--red);
-    }
-
-    .stat-desc {
-      font-size: 17px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-
-    /* ---- WHY AMPLITUDE ---- */
-    .why {
-      padding: 96px 48px;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .why-header {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: end;
-      margin-bottom: 56px;
-    }
-
-    .why-headline {
-      font-size: clamp(32px, 3.5vw, 52px);
-      font-weight: 700;
-      line-height: 1.05;
-      letter-spacing: -0.03em;
-    }
-
-    .why-headline em {
-      font-style: italic;
-      font-weight: 300;
-      color: var(--red);
-    }
-
-    .why-intro {
-      font-size: 18px;
-      color: var(--text-secondary);
-      line-height: 1.8;
-    }
-
-    .why-cards {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .why-card {
-      background: var(--bg-card);
-      padding: 40px 44px;
-      transition: background 0.2s;
-    }
-
-    .why-card:hover {
-      background: var(--bg-3);
-    }
-
-    .why-card-accent {
-      width: 32px;
-      height: 3px;
-      background: var(--red);
-      border-radius: 2px;
-      margin-bottom: 20px;
-    }
-
-    .why-card-title {
-      font-size: 18px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      margin-bottom: 12px;
-    }
-
-    .why-card-body {
-      font-size: 17px;
-      color: var(--text-secondary);
-      line-height: 1.75;
-    }
-
-    /* ---- WHAT CHANGES ---- */
-    .changes {
-      padding: 96px 48px;
-      background: var(--bg-2);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .changes-header {
-      margin-bottom: 56px;
-    }
-
-    .changes-headline {
-      font-size: clamp(32px, 3.5vw, 52px);
-      font-weight: 700;
-      line-height: 1.05;
-      letter-spacing: -0.03em;
-      max-width: 700px;
-    }
-
-    .changes-headline em {
-      font-style: italic;
-      font-weight: 300;
-      color: var(--red);
-    }
-
-    .changes-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .change-row {
-      display: grid;
-      grid-template-columns: 2fr 1fr 2fr;
-      gap: 0;
-      background: var(--border);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-
-    .change-before, .change-after {
-      padding: 28px 32px;
-      background: var(--bg-card);
-    }
-
-    .change-before {
-      border-right: 1px solid var(--border);
-    }
-
-    .change-after {
-      border-left: 1px solid var(--border);
-    }
-
-    .change-arrow {
-      background: var(--bg-3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 6px;
-      padding: 16px;
-    }
-
-    .arrow-label {
-      font-family: var(--mono);
-      font-size: 8px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-
-    .change-tag {
-      font-family: var(--mono);
-      font-size: 9px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-    }
-
-    .change-tag.after {
-      color: var(--red);
-    }
-
-    .change-text {
-      font-size: 17px;
-      color: var(--text-secondary);
-      line-height: 1.65;
-    }
-
-    .change-text.after {
-      color: var(--text-primary);
-    }
-
-    /* ---- CUSTOMER PROOF ---- */
-    .proof {
-      padding: 80px 48px;
-      background: var(--bg-3);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .proof-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: center;
-    }
-
-    .proof-logo-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-bright);
-      border-radius: 4px;
-      padding: 8px 16px;
-      margin-bottom: 24px;
-    }
-
-    .proof-logo-dot {
-      width: 8px;
-      height: 8px;
-      background: #FF6B35;
-      border-radius: 50%;
-    }
-
-    .proof-logo-text {
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-
-    .proof-headline {
-      font-size: clamp(22px, 2.2vw, 30px);
-      font-weight: 700;
-      line-height: 1.15;
-      letter-spacing: -0.02em;
-      margin-bottom: 16px;
-    }
-
-    .proof-headline em {
-      font-style: italic;
-      font-weight: 300;
-      color: var(--red);
-    }
-
-    .proof-body {
-      font-size: 17px;
-      color: var(--text-secondary);
-      line-height: 1.75;
-      margin-bottom: 20px;
-    }
-
-    .proof-link {
-      font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--red);
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .proof-cards {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .proof-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      padding: 20px 24px;
-    }
-
-    .proof-card-label {
-      font-family: var(--mono);
-      font-size: 9px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--red);
-      margin-bottom: 8px;
-    }
-
-    .proof-card-text {
-      font-size: 17px;
-      color: var(--text-secondary);
-      line-height: 1.65;
-    }
-
-    /* ---- WHY NOW ---- */
-    .why-now {
-      padding: 96px 48px;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .why-now-grid {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 80px;
-      align-items: start;
-    }
-
-    .why-now-left {
-      position: sticky;
-      top: 72px;
-    }
-
-    .why-now-headline {
-      font-size: clamp(28px, 3vw, 42px);
-      font-weight: 700;
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      margin-bottom: 16px;
-    }
-
-    .why-now-sub {
-      font-size: 18px;
-      color: var(--text-secondary);
-      line-height: 1.75;
-    }
-
-    .why-now-points {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
-    .now-point {
-      padding: 28px 0;
-      border-bottom: 1px solid var(--border);
-      display: grid;
-      grid-template-columns: 4px 1fr;
-      gap: 24px;
-    }
-
-    .now-point:first-child {
-      border-top: 1px solid var(--border);
-    }
-
-    .now-bar {
-      width: 4px;
-      background: var(--red);
-      border-radius: 2px;
-      opacity: 0.5;
-      min-height: 40px;
-    }
-
-    .now-title {
-      font-size: 17px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      margin-bottom: 10px;
-    }
-
-    .now-body {
-      font-size: 17px;
-      color: var(--text-secondary);
-      line-height: 1.75;
-    }
-
-    /* ---- RESOURCES ---- */
-    .resources {
-      padding: 48px 48px;
-      background: var(--bg-2);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .resources-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-top: 32px;
-    }
-
-    .resource-card {
-      display: block;
-      text-decoration: none;
-      padding: 20px 24px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      transition: border-color 0.2s;
-    }
-
-    .resource-card:hover {
-      border-color: var(--red-border);
-    }
-
-    .resource-type {
-      font-family: var(--mono);
-      font-size: 9px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--red);
-      margin-bottom: 8px;
-    }
-
-    .resource-title {
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--text-primary);
-      line-height: 1.3;
-      margin-bottom: 8px;
-    }
-
-    .resource-desc {
-      font-size: 17px;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    /* ---- FOOTER ---- */
-    footer {
-      padding: 40px 48px;
-      background: var(--bg);
-      border-top: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .footer-brand {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 18px;
-      color: var(--text-muted);
-    }
-
-    .footer-credit {
-      font-family: var(--mono);
-      font-size: 10px;
-      color: var(--text-muted);
-      letter-spacing: 0.06em;
-    }
-
-    /* ---- FADE IN ---- */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ---- ARROW SVG ---- */
-    .arrow-svg {
-      color: var(--red);
-    }
-  </style>
-</head>
-<body>
-
-<!-- NAV -->
-<nav>
-  <div class="nav-brand">
-    <div class="tt-logo">
-      <div class="tt-dot"></div>
-      <span class="tt-wordmark">tastytrade</span>
-    </div>
-  </div>
-  <div class="nav-tag">Confidential — Internal Use</div>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-eyebrow">Product Intelligence Brief — April 2026</div>
-  <h1 class="hero-headline">
-    The data exists.<br>
-    <em>The answers don't.</em>
-  </h1>
-  <p class="hero-sub">
-    tastytrade acquires sophisticated, self-directed investors. The question isn't whether they trade — it's which channels find the ones who stay, what drives the first trade, and where the product loses people it shouldn't. Right now, answering that takes weeks.
-  </p>
-  <div class="hero-meta">
-    <div class="hero-meta-item">
-      <span class="meta-label">Prepared for</span>
-      <span class="meta-value">tastytrade — Product & Data</span>
-    </div>
-    <div class="hero-meta-item">
-      <span class="meta-label">Platform</span>
-      <span class="meta-value">Amplitude Digital Analytics</span>
-    </div>
-    <div class="hero-meta-item">
-      <span class="meta-label">Focus Areas</span>
-      <span class="meta-value">Acquisition · Activation · Retention · AI</span>
-    </div>
-  </div>
-</section>
-
-<!-- BOTTOM LINE FIRST -->
-<section class="bottom-line fade-in">
-  <div class="bottom-line-inner">
-    <div>
-      <div class="bl-label">The bottom line</div>
-      <h2 class="bl-headline">The traders who fund and place a first trade in week one have dramatically higher LTV. You can't optimize for that if it takes weeks to answer a single question about the journey that gets them there.</h2>
-    </div>
-    <div>
-      <p class="bl-body">Marketing questions take hours when the data exists, weeks when it doesn't. Product can't move fast when new tracking requires engineering. The goal isn't more data — it's a self-service analytics layer so any team can answer behavioral questions without waiting. This is what that looks like.</p>
-    </div>
-  </div>
-</section>
-
-<!-- THE PROBLEM -->
-<section class="problem fade-in">
-  <div class="section-inner">
-    <div class="problem-grid">
-      <div>
-        <div class="section-label">The Gap</div>
-        <h2 class="problem-headline">Where insight<br>goes to <em>wait</em></h2>
-      </div>
-      <div class="problem-items">
-
-        <div class="problem-item">
-          <span class="problem-num">01</span>
-          <div>
-            <div class="problem-title">Acquisition answers are stuck behind data stitching</div>
-            <p class="problem-body">Which channels drive quality customers? What's the expected LTV by source? How does pre-acquisition web behavior connect to post-acquisition outcomes? These are fundamental questions — and answering any one of them requires joining data from several disconnected platforms. One question, multiple pipelines, days of lead time before analysis can even start.</p>
-            <div class="problem-quote">"Getting the multitude of systems to talk to each other... answering a single acquisition question often requires stitching together data from several disconnected platforms." — tastytrade</div>
-          </div>
-        </div>
-
-        <div class="problem-item">
-          <span class="problem-num">02</span>
-          <div>
-            <div class="problem-title">Marketing and product have no shared view of the funnel</div>
-            <p class="problem-body">Marketing optimizes for acquisition. Product optimizes for activation. But the behaviors that connect the two — what a user did on the site before signing up, which features they touched first, how long until first trade — live in separate ecosystems. You can't connect brand to performance when they live in different tools with different metrics and different owners.</p>
-          </div>
-        </div>
-
-        <div class="problem-item">
-          <span class="problem-num">03</span>
-          <div>
-            <div class="problem-title">New product questions require engineering before insight</div>
-            <p class="problem-body">When a product question comes up that doesn't have existing tracking, the answer requires engineering to instrument first — adding lead time before data collection even begins. By the time insight is available, the decision has already been made on gut feel. A self-service behavioral analytics layer breaks this dependency so teams can move from question to answer without a sprint cycle in between.</p>
-            <div class="problem-quote">"New instrumentation requires engineering, which adds lead time before we can even start collecting data." — tastytrade</div>
-          </div>
-        </div>
-
-        <div class="problem-item">
-          <span class="problem-num">04</span>
-          <div>
-            <div class="problem-title">Rockerbox is hitting its ceiling on attribution</div>
-            <p class="problem-body">Multi-touch attribution that ends at acquisition misses the most important part of the story for tastytrade: what happens from sign-up to funded account to first trade. The channel that drives account opens isn't always the one that drives traders who stay. Without behavioral data downstream, you're optimizing for the wrong conversion event.</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- STAT BAND -->
-<section class="stat-band fade-in">
-  <div class="stat-row">
-    <div class="stat-cell">
-      <div class="stat-number">Hours<span>–</span>Weeks</div>
-      <div class="stat-desc">Time to answer a single acquisition question — hours when data exists, weeks when new pipelines are needed</div>
-    </div>
-    <div class="stat-cell">
-      <div class="stat-number"><span>0</span></div>
-      <div class="stat-desc">Self-service behavioral analytics tools connecting pre-acquisition to post-acquisition behavior today</div>
-    </div>
-    <div class="stat-cell">
-      <div class="stat-number">Account→<span>Trade</span></div>
-      <div class="stat-desc">The conversion that matters most — and the one with the least behavioral visibility in the current stack</div>
-    </div>
-  </div>
-</section>
-
-<!-- WHY AMPLITUDE -->
-<section class="why fade-in">
-  <div class="section-inner">
-    <div class="why-header">
-      <div>
-        <div class="section-label">Why Amplitude</div>
-        <h2 class="why-headline">Built for the<br><em>full journey.</em></h2>
-      </div>
-      <p class="why-intro">tastytrade's challenge isn't a lack of data — it's a lack of connectivity. Acquisition data, product data, and downstream trading behavior live in separate systems, requiring engineering effort to join. Amplitude is the single platform that connects all of it, making every team self-sufficient from day one.</p>
-    </div>
-
-    <div class="why-cards">
-
-      <div class="why-card">
-        <div class="why-card-accent"></div>
-        <h4 class="why-card-title">Acquisition to first trade in one view</h4>
-        <p class="why-card-body">Amplitude connects pre-acquisition web behavior to post-acquisition product outcomes natively. You can see which channel drove a user, what they did in the product, when they funded, and when they placed their first trade — all in one funnel, no pipeline required. That's the model that beats Rockerbox's ceiling.</p>
-      </div>
-
-      <div class="why-card">
-        <div class="why-card-accent"></div>
-        <h4 class="why-card-title">Any team member can answer behavioral questions</h4>
-        <p class="why-card-body">No SQL. No waiting on data engineering. Amplitude's natural language interface lets product managers, marketers, and analysts ask questions about user behavior and get answers in seconds. The self-service layer tastytrade described — where teams move from question to insight without a sprint cycle — is exactly what Amplitude delivers out of the box.</p>
-      </div>
-
-      <div class="why-card">
-        <div class="why-card-accent"></div>
-        <h4 class="why-card-title">Identify the behaviors that predict high-LTV traders</h4>
-        <p class="why-card-body">Amplitude's behavioral cohorts let you define what a high-value trader looks like — funded in 48 hours, first trade within a week — and find the acquisition sources, onboarding paths, and feature combinations that produce them. Then sync those cohorts directly to your marketing channels to acquire more of the same profile.</p>
-      </div>
-
-      <div class="why-card">
-        <div class="why-card-accent"></div>
-        <h4 class="why-card-title">Experimentation without engineering dependencies</h4>
-        <p class="why-card-body">Amplitude's autocapture eliminates the instrumentation-before-insight bottleneck. New features are tracked automatically. And when you want to test a hypothesis — new onboarding flow, different activation nudge, alternate funding UX — Amplitude Experiment lets the product team run A/B tests and measure downstream trading behavior, not just clicks.</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- WHAT CHANGES -->
-<section class="changes fade-in">
-  <div class="section-inner">
-    <div class="changes-header">
-      <div class="section-label">What Actually Changes</div>
-      <h2 class="changes-headline">Less waiting.<br><em>More knowing.</em></h2>
-    </div>
-
-    <div class="changes-grid">
-
-      <div class="change-row">
-        <div class="change-before">
-          <div class="change-tag">Before</div>
-          <div class="change-text">Marketing asks which channel drives quality traders. Answer requires joining data from 3+ platforms. Takes days when data exists, weeks when it doesn't.</div>
-        </div>
-        <div class="change-arrow">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="arrow-svg"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span class="arrow-label">Amplitude</span>
-        </div>
-        <div class="change-after">
-          <div class="change-tag after">After</div>
-          <div class="change-text after">Single funnel view from first click to first trade. Any team member answers in minutes, no pipeline, no SQL.</div>
-        </div>
-      </div>
-
-      <div class="change-row">
-        <div class="change-before">
-          <div class="change-tag">Before</div>
-          <div class="change-text">New product question means new instrumentation. Engineering required before data collection begins. Decisions made on gut feel while you wait.</div>
-        </div>
-        <div class="change-arrow">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="arrow-svg"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span class="arrow-label">Amplitude</span>
-        </div>
-        <div class="change-after">
-          <div class="change-tag after">After</div>
-          <div class="change-text after">Autocapture tracks all interactions from day one. New questions answered immediately with existing data — no sprint required.</div>
-        </div>
-      </div>
-
-      <div class="change-row">
-        <div class="change-before">
-          <div class="change-tag">Before</div>
-          <div class="change-text">Marketing and product optimize separately. No shared view of the account-to-trade journey. Brand and performance marketing live in different ecosystems.</div>
-        </div>
-        <div class="change-arrow">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="arrow-svg"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span class="arrow-label">Amplitude</span>
-        </div>
-        <div class="change-after">
-          <div class="change-tag after">After</div>
-          <div class="change-text after">One platform, one funnel. Marketing and product share behavioral data. Attribution connects acquisition source to downstream trading outcomes.</div>
-        </div>
-      </div>
-
-      <div class="change-row">
-        <div class="change-before">
-          <div class="change-tag">Before</div>
-          <div class="change-text">Feature adoption patterns require analyst time to surface. Retention behaviors are visible in hindsight, not in time to act.</div>
-        </div>
-        <div class="change-arrow">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="arrow-svg"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span class="arrow-label">Amplitude</span>
-        </div>
-        <div class="change-after">
-          <div class="change-tag after">After</div>
-          <div class="change-text after">Amplitude AI surfaces adoption patterns and retention signals automatically. Anomalies flagged before they become churn. Every PM self-sufficient.</div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- CUSTOMER PROOF -->
-<section class="proof fade-in">
-  <div class="proof-inner">
-    <div>
-      <div class="section-label">In Practice</div>
-      <div class="proof-logo-pill">
-        <div class="proof-logo-dot"></div>
-        <span class="proof-logo-text">Global Trading Platform</span>
-      </div>
-      <h3 class="proof-headline">A trading platform.<br>Fragmented data.<br><em>A familiar problem.</em></h3>
-      <p class="proof-body">A global leader in Forex, CFD, and crypto brokerage serving over one million clients had a fragmented view of customer behavior — various teams using dozens of separate tools, data silos, and gaps. Sound familiar? By consolidating on Amplitude, they built a unified behavioral layer, identified which behaviors predicted high-value traders, and synced lookalike segments to their acquisition channels.</p>
-      <p class="proof-body">The result over four months: 14% ROI increase across top-performing channels after refining channel selection and optimizing acquisition spend around the behaviors that actually predicted long-term value.</p>
-      <a href="https://amplitude.com/blog/finance-leader-record-revenue-increase" target="_blank" class="proof-link">Read the full story →</a>
-    </div>
-    <div class="proof-cards">
-      <div class="proof-card">
-        <div class="proof-card-label">The problem they had</div>
-        <div class="proof-card-text">Dozens of separate tools across teams. No unified view of which customers were high-value or what drove them to trade. Acquisition spend optimized for volume, not LTV.</div>
-      </div>
-      <div class="proof-card">
-        <div class="proof-card-label">What changed</div>
-        <div class="proof-card-text">Unified behavioral data from first click to active trader. Identified the actions high-LTV customers took in their first week. Synced cohorts to acquisition channels to find more of them.</div>
-      </div>
-      <div class="proof-card">
-        <div class="proof-card-label">The outcome</div>
-        <div class="proof-card-text">14% ROI increase across top channels in four months. Proactive reactivation of at-risk high-value customers. Marketing and product working from the same behavioral truth.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- WHY NOW -->
-<section class="why-now fade-in">
-  <div class="section-inner">
-    <div class="why-now-grid">
-      <div class="why-now-left">
-        <div class="section-label">Why Now</div>
-        <h2 class="why-now-headline">The compounding cost of waiting</h2>
-        <p class="why-now-sub">Three things are working against tastytrade's growth right now. Each one gets harder to fix the longer it runs.</p>
-      </div>
-      <div class="why-now-points">
-
-        <div class="now-point">
-          <div class="now-bar"></div>
-          <div>
-            <div class="now-title">Every week without behavioral data is a week of acquisition spend flying blind</div>
-            <p class="now-body">tastytrade is spending on channels today without knowing which ones produce traders who fund and place a first trade within the first week. That's the cohort that matters. Until behavioral data connects acquisition to activation, every channel decision is a bet on proxies — clicks, signups — rather than the outcomes that actually predict LTV.</p>
-          </div>
-        </div>
-
-        <div class="now-point">
-          <div class="now-bar"></div>
-          <div>
-            <div class="now-title">Competitors who understand the account-to-trade journey will optimize it faster</div>
-            <p class="now-body">The self-directed investing market is competitive. The platforms that win are the ones that reduce friction between signup and first trade most effectively — and they do it by running experiments on every step of that journey. You can't experiment on what you can't measure. The gap between tastytrade's current visibility and what's possible widens every quarter.</p>
-          </div>
-        </div>
-
-        <div class="now-point">
-          <div class="now-bar"></div>
-          <div>
-            <div class="now-title">Instrumentation debt compounds — the right time to establish a behavioral layer is before scale forces you to</div>
-            <p class="now-body">As tastytrade grows, the number of teams asking behavioral questions grows with it. The Director of Internal Tools and Manager of Data Analytics & BI joining this conversation signals that demand for self-serve insight is already broader than product. Building the right foundation now means every team can access behavioral data — not just the ones with engineering resources to instrument it themselves.</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- RESOURCES -->
-<section class="resources fade-in">
-  <div class="section-inner">
-    <div class="section-label">Further Reading</div>
-    <div class="resources-grid">
-
-      <a href="https://amplitude.com/amplitude-analytics" target="_blank" class="resource-card">
-        <div class="resource-type">Platform</div>
-        <div class="resource-title">Amplitude Analytics</div>
-        <div class="resource-desc">Understand the full user journey from first click to long-term retention.</div>
-      </a>
-
-      <a href="https://amplitude.com/ai" target="_blank" class="resource-card">
-        <div class="resource-type">AI</div>
-        <div class="resource-title">Amplitude AI</div>
-        <div class="resource-desc">Analytics that never stops working — automated insights, anomaly detection, natural language queries.</div>
-      </a>
-
-      <a href="https://amplitude.com/resources/g2-product-analytics-report" target="_blank" class="resource-card">
-        <div class="resource-type">Validation</div>
-        <div class="resource-title">G2 Product Analytics Report</div>
-        <div class="resource-desc">Independent market validation of where Amplitude sits relative to competitors.</div>
-      </a>
-
-      <a href="https://amplitude.com/blog/finance-leader-record-revenue-increase" target="_blank" class="resource-card">
-        <div class="resource-type">Customer Story</div>
-        <div class="resource-title">Global Trading Platform</div>
-        <div class="resource-desc">How a trading brokerage unified behavioral data and increased acquisition ROI by 14% in four months.</div>
-      </a>
-
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-brand">
-    <div class="tt-dot"></div>
-    <span>tastytrade × Amplitude</span>
-  </div>
-  <div class="footer-credit">Prepared by John Wallace · john.wallace@amplitude.com · 631-942-8868</div>
-</footer>
-
-<script>
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.08 });
-
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-</script>
-
-</body>
-</html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>tastytrade × Amplitude</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#0A0A0A;
+  --black-2:#111111;
+  --black-3:#1A1A1A;
+  --black-4:#222222;
+  --red:#E21E26;
+  --red-dark:#B01820;
+  --red-glow:rgba(226,30,38,0.15);
+  --white:#FFFFFF;
+  --white-90:rgba(255,255,255,0.9);
+  --white-70:rgba(255,255,255,0.7);
+  --white-50:rgba(255,255,255,0.5);
+  --white-30:rgba(255,255,255,0.3);
+  --white-10:rgba(255,255,255,0.1);
+  --white-06:rgba(255,255,255,0.06);
+  --white-03:rgba(255,255,255,0.03);
+  --green:#22C55E;
+  --green-bg:rgba(34,197,94,0.1);
+  --amber:#F59E0B;
+  --amber-bg:rgba(245,158,11,0.1);
+  --border:rgba(255,255,255,0.08);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--black);color:var(--white);font-size:15px;line-height:1.6;overflow-x:hidden}
+
+/* ─── TOPBAR ─── */
+.topbar{
+  padding:16px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  background:var(--black);
+  position:sticky;top:0;z-index:100;
+}
+.topbar-logo{display:flex;align-items:center;gap:12px}
+.tt-logo{
+  background:var(--red);
+  color:white;
+  font-size:13px;
+  font-weight:800;
+  padding:5px 10px;
+  border-radius:4px;
+  letter-spacing:-0.3px;
+}
+.topbar-x{color:var(--white-30);font-size:14px;font-weight:300}
+.amp-logo{color:var(--white-70);font-size:13px;font-weight:600;letter-spacing:0.2px}
+.topbar-right{font-family:'DM Mono',monospace;font-size:10px;color:var(--white-30);letter-spacing:0.8px;text-transform:uppercase}
+
+/* ─── HERO ─── */
+.hero{
+  padding:96px 48px 80px;
+  max-width:960px;
+  margin:0 auto;
+  text-align:center;
+}
+.hero-kicker{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--red-glow);
+  border:1px solid rgba(226,30,38,0.3);
+  border-radius:20px;
+  padding:6px 16px;
+  font-size:11px;
+  font-weight:700;
+  color:var(--red);
+  letter-spacing:1px;
+  text-transform:uppercase;
+  margin-bottom:32px;
+}
+.hero-kicker::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0}
+.hero-h1{
+  font-size:clamp(42px,6vw,68px);
+  font-weight:900;
+  line-height:1.02;
+  letter-spacing:-2px;
+  color:var(--white);
+  margin-bottom:28px;
+}
+.hero-h1 .red{color:var(--red)}
+.hero-h1 .dim{color:var(--white-50)}
+.hero-sub{
+  font-size:18px;
+  font-weight:400;
+  color:var(--white-70);
+  max-width:620px;
+  margin:0 auto 56px;
+  line-height:1.7;
+}
+.hero-stats{
+  display:flex;justify-content:center;gap:0;
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+  max-width:640px;
+  margin:0 auto;
+}
+.hero-stat{
+  flex:1;
+  padding:24px 20px;
+  border-right:1px solid var(--border);
+  text-align:center;
+}
+.hero-stat:last-child{border-right:none}
+.hs-num{font-size:28px;font-weight:800;color:var(--white);letter-spacing:-1px;line-height:1}
+.hs-num.red{color:var(--red)}
+.hs-label{font-size:11px;color:var(--white-50);margin-top:6px;font-weight:500}
+
+/* ─── SECTION DIVIDER ─── */
+.divider{height:1px;background:var(--border);margin:0 48px}
+
+/* ─── USE CASE BLOCKS ─── */
+.uc-section{padding:0 48px;max-width:1160px;margin:0 auto}
+
+.uc-block{
+  padding:80px 0;
+  border-bottom:1px solid var(--border);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:72px;
+  align-items:start;
+}
+.uc-block:last-child{border-bottom:none}
+.uc-block.flip{direction:rtl}
+.uc-block.flip > *{direction:ltr}
+
+.uc-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:700;
+  color:var(--white-50);
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  margin-bottom:20px;
+}
+.uc-tag .num{
+  background:var(--red);
+  color:white;
+  width:20px;height:20px;
+  border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:800;
+  flex-shrink:0;
+}
+
+.uc-h2{
+  font-size:clamp(28px,3vw,38px);
+  font-weight:800;
+  line-height:1.1;
+  letter-spacing:-1px;
+  color:var(--white);
+  margin-bottom:20px;
+}
+.uc-h2 .red{color:var(--red)}
+
+.problem-box{
+  background:rgba(226,30,38,0.06);
+  border:1px solid rgba(226,30,38,0.2);
+  border-radius:10px;
+  padding:18px 20px;
+  margin-bottom:28px;
+}
+.problem-label{
+  font-size:10px;font-weight:700;
+  color:var(--red);
+  text-transform:uppercase;letter-spacing:1.5px;
+  margin-bottom:8px;
+  font-family:'DM Mono',monospace;
+}
+.problem-text{font-size:14px;color:var(--white-70);line-height:1.65}
+
+.uc-body{font-size:15px;color:var(--white-60,rgba(255,255,255,0.6));line-height:1.75;margin-bottom:24px}
+
+.uc-list{list-style:none;display:flex;flex-direction:column;gap:12px}
+.uc-list li{
+  display:flex;align-items:flex-start;gap:12px;
+  font-size:14px;color:var(--white-70);
+  line-height:1.5;
+}
+.uc-list li::before{
+  content:'→';
+  color:var(--red);
+  font-weight:700;
+  flex-shrink:0;
+  margin-top:1px;
+  font-family:'DM Mono',monospace;
+}
+
+/* ─── VISUAL CARDS ─── */
+.viz{
+  background:var(--black-3);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:28px;
+  position:relative;
+  overflow:hidden;
+}
+.viz::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--red);
+  border-radius:14px 14px 0 0;
+}
+.viz-label{
+  font-family:'DM Mono',monospace;
+  font-size:10px;color:var(--white-40,rgba(255,255,255,0.4));
+  text-transform:uppercase;letter-spacing:1.5px;
+  margin-bottom:24px;
+}
+
+/* funnel */
+.f-row{
+  display:flex;align-items:center;gap:14px;
+  padding:11px 0;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.f-row:last-of-type{border-bottom:none}
+.f-lbl{font-size:12px;color:var(--white-60,rgba(255,255,255,0.6));font-family:'DM Mono',monospace;width:130px;flex-shrink:0}
+.f-track{flex:1;height:7px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden}
+.f-fill{height:100%;border-radius:4px;background:var(--red);transition:width 0.3s}
+.f-val{font-size:13px;font-weight:700;color:var(--white);width:38px;text-align:right;font-family:'DM Mono',monospace}
+.f-drop{font-size:10px;color:var(--red);width:42px;text-align:right;font-family:'DM Mono',monospace;font-weight:600}
+
+/* churn cards */
+.churn-item{
+  display:flex;align-items:center;gap:14px;
+  padding:13px 0;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.churn-item:last-child{border-bottom:none}
+.c-av{
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;
+  flex-shrink:0;
+  font-family:'DM Mono',monospace;
+}
+.c-av.red{background:rgba(226,30,38,0.2);color:#FCA5A5}
+.c-av.amber{background:rgba(245,158,11,0.15);color:#FCD34D}
+.c-av.green{background:rgba(34,197,94,0.15);color:#86EFAC}
+.c-info{flex:1}
+.c-name{font-size:13px;font-weight:600;color:var(--white-90)}
+.c-detail{font-size:11px;color:var(--white-50);margin-top:2px}
+.c-score{font-size:13px;font-weight:700;font-family:'DM Mono',monospace}
+.c-score.red{color:#FCA5A5}
+.c-score.amber{color:#FCD34D}
+.c-score.green{color:#86EFAC}
+
+/* guides */
+.guide-item{
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:18px;
+  margin-bottom:12px;
+}
+.guide-item:last-child{margin-bottom:0}
+.g-trigger{
+  font-size:10px;font-weight:700;
+  color:var(--red);
+  text-transform:uppercase;letter-spacing:1px;
+  margin-bottom:6px;
+  font-family:'DM Mono',monospace;
+}
+.g-title{font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px}
+.g-desc{font-size:12px;color:var(--white-50);line-height:1.5}
+
+/* product analytics bars */
+.pa-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.pa-item:last-child{border-bottom:none}
+.pa-feat{font-size:13px;color:var(--white-80,rgba(255,255,255,0.8));flex:1}
+.pa-track{width:110px;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
+.pa-fill{height:100%;border-radius:3px}
+.pa-val{font-size:12px;font-family:'DM Mono',monospace;width:36px;text-align:right}
+
+/* session replay */
+.sr-item{
+  padding:14px 0;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.sr-item:last-child{border-bottom:none}
+.sr-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.sr-meta{font-size:11px;color:var(--white-40,rgba(255,255,255,0.4));font-family:'DM Mono',monospace}
+.sr-tag{
+  font-size:10px;font-weight:700;
+  padding:3px 9px;border-radius:20px;
+}
+.tag-red{background:rgba(226,30,38,0.15);color:#FCA5A5}
+.tag-amber{background:rgba(245,158,11,0.15);color:#FCD34D}
+.tag-green{background:rgba(34,197,94,0.15);color:#86EFAC}
+.sr-text{font-size:13px;color:var(--white-70);line-height:1.5}
+
+/* attribution compare */
+.attr-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.attr-col{background:rgba(255,255,255,0.03);border-radius:10px;padding:18px}
+.attr-head{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;font-family:'DM Mono',monospace}
+.attr-head.red{color:var(--red)}
+.attr-head.green{color:var(--green)}
+.attr-row{
+  font-size:12px;color:var(--white-60,rgba(255,255,255,0.6));
+  margin-bottom:8px;
+  display:flex;align-items:flex-start;gap:8px;
+  line-height:1.4;
+}
+.attr-row::before{font-size:11px;flex-shrink:0;margin-top:1px}
+.attr-row.bad::before{content:'✗';color:var(--red)}
+.attr-row.good::before{content:'✓';color:var(--green)}
+
+/* AI insight box */
+.ai-box{
+  margin-top:20px;
+  background:rgba(226,30,38,0.06);
+  border:1px solid rgba(226,30,38,0.2);
+  border-radius:8px;
+  padding:14px 16px;
+}
+.ai-label{font-size:10px;font-weight:700;color:var(--red);font-family:'DM Mono',monospace;letter-spacing:1px;margin-bottom:4px}
+.ai-text{font-size:12px;color:var(--white-70);line-height:1.55}
+.ai-text strong{color:var(--white)}
+
+/* ─── PULL QUOTE ─── */
+.quote-wrap{
+  padding:72px 48px;
+  max-width:800px;
+  margin:0 auto;
+  text-align:center;
+}
+.qt{
+  font-size:clamp(20px,2.5vw,27px);
+  font-weight:600;
+  color:var(--white-80,rgba(255,255,255,0.8));
+  line-height:1.5;
+  font-style:italic;
+  margin-bottom:16px;
+}
+.qt-attr{font-size:12px;font-family:'DM Mono',monospace;color:var(--white-30);text-transform:uppercase;letter-spacing:1px}
+
+/* ─── PROOF ─── */
+.proof-wrap{
+  background:var(--black-2);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:56px 48px;
+}
+.proof-inner{max-width:1160px;margin:0 auto}
+.proof-eyebrow{
+  font-size:11px;font-weight:700;
+  color:var(--white-40,rgba(255,255,255,0.4));
+  text-transform:uppercase;letter-spacing:2px;
+  text-align:center;margin-bottom:36px;
+  font-family:'DM Mono',monospace;
+}
+.proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.proof-card{
+  background:var(--black-3);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:28px 24px;
+  position:relative;overflow:hidden;
+}
+.proof-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--red);
+}
+.proof-num{
+  font-size:42px;font-weight:900;
+  letter-spacing:-2px;
+  color:var(--white);
+  line-height:1;
+  margin-bottom:10px;
+}
+.proof-desc{font-size:13px;color:var(--white-60,rgba(255,255,255,0.6));line-height:1.55;margin-bottom:12px}
+.proof-co{font-size:10px;font-family:'DM Mono',monospace;color:var(--white-30);text-transform:uppercase;letter-spacing:1px}
+
+/* ─── NEXT STEPS ─── */
+.next-wrap{padding:96px 48px;max-width:1000px;margin:0 auto;text-align:center}
+.next-h2{
+  font-size:clamp(32px,4vw,48px);
+  font-weight:900;
+  letter-spacing:-1.5px;
+  color:var(--white);
+  margin-bottom:14px;
+}
+.next-sub{font-size:16px;color:var(--white-50);margin-bottom:56px}
+
+.next-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;text-align:left;margin-bottom:56px}
+.next-card{
+  background:var(--black-3);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:28px;
+}
+.next-n{
+  font-size:13px;font-weight:800;
+  color:var(--red);
+  font-family:'DM Mono',monospace;
+  margin-bottom:14px;
+}
+.next-title{font-size:16px;font-weight:700;color:var(--white);margin-bottom:8px;letter-spacing:-0.3px}
+.next-desc{font-size:13px;color:var(--white-50);line-height:1.55}
+
+.contact{font-size:14px;color:var(--white-40,rgba(255,255,255,0.4))}
+.contact a{color:var(--white-70);text-decoration:none}
+.contact a:hover{color:var(--white)}
+
+/* ─── FOOTER ─── */
+.fo...
